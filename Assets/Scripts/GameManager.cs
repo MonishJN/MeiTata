@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         // 3. Load the new level
         previousScene = currentScene;
         currentLevel++;
-        if (currentLevel == 14)
+        if (currentLevel == 15)
         {
             //Debug.Log("Work in Progress! Just Play from the Start!");
             //currentLevel = 1;
