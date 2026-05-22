@@ -14,18 +14,29 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 1;
 
     public static GameManager Instance { get; private set; }
+    // private void Awake()
+    // {
+    //     if (Instance != null && Instance != this)
+    //     {
+    //         Destroy(this);
+    //     }
+    //     else
+    //     {
+    //         Instance = this;
+    //     }
+    //     DontDestroyOnLoad(gameObject);
+    // }
     private void Awake()
+{
+    if (Instance != null && Instance != this)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-        DontDestroyOnLoad(gameObject);
+        Destroy(gameObject); // <-- destroy the duplicate object
+        return;
     }
+
+    Instance = this;
+    DontDestroyOnLoad(gameObject);
+}
     public void StartGame() {
         //SceneManager.LoadSceneAsync("Level" + currentLevel, LoadSceneMode.Additive);
         //currentScene = "Level" + currentLevel;
@@ -49,11 +60,11 @@ public class GameManager : MonoBehaviour
         // 3. Load the new level
         previousScene = currentScene;
         currentLevel++;
-        if (currentLevel == 17)
+        if (currentLevel == 20)
         {
             //Debug.Log("Work in Progress! Just Play from the Start!");
             //currentLevel = 1;
-            levelCompleteUI.transform.GetChild(3).gameObject.SetActive(false);
+            levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
         }
         currentScene = "Level" + currentLevel;
         StartCoroutine(TransitionToNextLevel(previousScene,currentScene));
