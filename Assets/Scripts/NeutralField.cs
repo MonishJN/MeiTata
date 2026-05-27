@@ -10,6 +10,7 @@ public class NeutralField : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Player Entered Neutral Field!");
+            GameManager.Instance.IncrementForceExperienced();
             Player.Instance.playerDirection = GetDirectionToClosestPoint();
             Player.Instance.SetPlayerState(Player.PlayerState.Force);
 

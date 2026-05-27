@@ -109,6 +109,7 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space) && list.Count != 0)
                 {
                     Shoot();
+                    GameManager.Instance.IncrementShoots();
                 }
                 break;
 
