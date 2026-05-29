@@ -7,63 +7,82 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private CanvasGroup faderImage;
 
+
     [SerializeField] private GameObject levelCompleteUI;
-    [SerializeField] private GameObject levelMenuUI;
+    // [SerializeField] private GameObject levelMenuUI;
     [SerializeField] private GameObject scoreUI;
+
 
     private int firedShots;
     private int forceExperienced;
     private int score;
-    private int[] playersBestScore = new int[20];
+    public int[] playersBestScore = new int[20];
+    public int levelsUnlocked ;
     //[SerializeField] private GameObject tutorialUI;
     private string currentScene = "Main Menu";
     private string previousScene;
     private int currentLevel = 1;
 
     public static GameManager Instance { get; private set; }
-    private void Awake()
-{
-    if (Instance != null && Instance != this)
+    private void Awake(){
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // <-- destroy the duplicate object
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        Data loadedData = SaveSystem.LoadData(); 
+        if (loadedData != null) {
+            Debug.Log("Data loaded successfully.");
+            playersBestScore = loadedData.highScores;
+            levelsUnlocked = loadedData.levelsUnlocked;
+        } else {
+            // File exists but data is null → fallback
+            Debug.LogWarning("Data file found but data is null. Initializing defaults.");
+            playersBestScore = new int[20];
+            levelsUnlocked = 1;
+            SaveSystem.SaveData(this);
+        }
+    }
+    private void Start()
     {
-        Destroy(gameObject); // <-- destroy the duplicate object
-        return;
+        SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
+
     }
 
-    Instance = this;
-    DontDestroyOnLoad(gameObject);
-}
-    // public void StartGame() {
-    //     //SceneManager.LoadSceneAsync("Level" + currentLevel, LoadSceneMode.Additive);
-    //     //currentScene = "Level" + currentLevel;
-    //     //SceneManager.UnloadSceneAsync("Main Menu");
-    //     // previousScene = currentScene;
-    //     // currentScene = "Level" + currentLevel;
-    //     // StartCoroutine(TransitionToNextLevel(previousScene, currentScene));
 
+    public void GotoThatLevel(int level) {
+        
+        //Reset the score and other variables for the new level
+        firedShots = 0;
+        forceExperienced = 0;
 
-    // }
-    public void LevelCompleted() { 
+        previousScene = currentScene;
+        currentLevel = level;
+        currentScene = "Level" + currentLevel;
+        
+        StartCoroutine(SceneTransition(previousScene, currentScene));
+    }
+        public void LevelCompleted() { 
         levelCompleteUI.SetActive(true);
         DisplayScore();
+        levelsUnlocked = Mathf.Max(levelsUnlocked, currentLevel + 1);
+        SaveSystem.SaveData(this);
         if (currentScene == "Level20") {
             //Debug.Log("Work in Progress! Just Play from the Start!");
             //currentLevel = 1;
-            levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
-            levelCompleteUI.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);
+            levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.GetComponent<UnityEngine.UI.Button>().interactable = false;
             return;
         }
     }
     public void BackToMainMenu() {
         levelCompleteUI.SetActive(false);
+        levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.GetComponent<UnityEngine.UI.Button>().interactable = true;
         previousScene = currentScene;
         currentScene = "Main Menu";
-        StartCoroutine(TransitionToNextLevel(previousScene, currentScene));
-    }
-    public void GotoThatLevel(int level) {
-        previousScene = currentScene;
-        currentLevel = level;
-        currentScene = "Level" + currentLevel;
-        StartCoroutine(TransitionToNextLevel(previousScene, currentScene));
+        StartCoroutine(SceneTransition(previousScene, currentScene));
     }
     public void ReloadLevel() {
         levelCompleteUI.SetActive(false);
@@ -71,7 +90,7 @@ public class GameManager : MonoBehaviour
         firedShots = 0;
         forceExperienced = 0;
 
-        StartCoroutine(TransitionToNextLevel(currentScene, currentScene));
+        StartCoroutine(SceneTransition(currentScene, currentScene));
 
     }
     public void NextLevel()
@@ -86,25 +105,21 @@ public class GameManager : MonoBehaviour
         previousScene = currentScene;
         currentLevel++;
         currentScene = "Level" + currentLevel;
-        StartCoroutine(TransitionToNextLevel(previousScene,currentScene));
+        StartCoroutine(SceneTransition(previousScene,currentScene));
     }
-    //private void TutorialUI() {
-    //    if (currentLevel <= 1) { 
-    //        tutorialUI.SetActive(true);
-    //    }
-    //}
-    public IEnumerator TransitionToNextLevel(string from,string to)
+    public IEnumerator SceneTransition(string from,string to)
     {
         // 1. Start Fading to Black
         yield return StartCoroutine(Fade(1f)); // 1f = full black
 
         // 2. Unload the current level
-        AsyncOperation unload = SceneManager.UnloadSceneAsync(from);
-        while (!unload.isDone) yield return null;
+        // skip this step if from is "Manager" (i.e. first time loading a level from the main menu)
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(from);
+            while (!unload.isDone) yield return null;
 
-        
-        AsyncOperation load = SceneManager.LoadSceneAsync(to, LoadSceneMode.Additive);
-        while (!load.isDone) yield return null;
+        // skip this step if to is "Manager" (i.e. going back to main menu)
+            AsyncOperation load = SceneManager.LoadSceneAsync(to, LoadSceneMode.Additive);
+            while (!load.isDone) yield return null;
 
         // 4. Set the new scene as active (for lighting/physics)
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(to));
@@ -123,12 +138,6 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
-    // private void DisplayScore() {
-    //     // scoreUI.SetActive(true);
-    //     CalculateScore();
-    //     scoreUI.transform.GetComponent<TMPro.TextMeshProUGUI>().text = 
-    //         firedShots + "\n" + forceExperienced + "\n" + 0 + "\n" + playersBestScore[currentLevel-1] + "\n" + score;
-    // }
     private void DisplayScore() {
     CalculateScore();
     StartCoroutine(ShowScoreLines());
@@ -162,7 +171,7 @@ private IEnumerator ShowScoreLines() {
         forceExperienced++;
     }
     public void CalculateScore() {
-        score = 10000 - (firedShots * 100 + forceExperienced * 200);
+        score = 5000 - (firedShots * 100 + forceExperienced * 200);
         if (score <= 1500) {
             score = 1500;
         }
