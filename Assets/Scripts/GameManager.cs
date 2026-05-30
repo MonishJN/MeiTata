@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using NUnit.Framework.Constraints;
 
 public class GameManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private CanvasGroup faderImage;
-
+    [SerializeField] private GameObject joyStickUI;
 
     [SerializeField] private GameObject levelCompleteUI;
     // [SerializeField] private GameObject levelMenuUI;
@@ -64,8 +65,10 @@ public class GameManager : MonoBehaviour
         currentScene = "Level" + currentLevel;
         
         StartCoroutine(SceneTransition(previousScene, currentScene));
+        // joyStickUI.SetActive(true);
     }
-        public void LevelCompleted() { 
+    public void LevelCompleted() { 
+        joyStickUI.SetActive(false);
         levelCompleteUI.SetActive(true);
         DisplayScore();
         levelsUnlocked = Mathf.Max(levelsUnlocked, currentLevel + 1);
@@ -79,6 +82,7 @@ public class GameManager : MonoBehaviour
     }
     public void BackToMainMenu() {
         levelCompleteUI.SetActive(false);
+        joyStickUI.SetActive(false);
         levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.GetComponent<UnityEngine.UI.Button>().interactable = true;
         previousScene = currentScene;
         currentScene = "Main Menu";
@@ -91,12 +95,11 @@ public class GameManager : MonoBehaviour
         forceExperienced = 0;
 
         StartCoroutine(SceneTransition(currentScene, currentScene));
-
+        // joyStickUI.SetActive(true);
     }
     public void NextLevel()
     {
         levelCompleteUI.SetActive(false);
-
         //Reset the score and other variables for the new level
         firedShots = 0;
         forceExperienced = 0;
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviour
         currentLevel++;
         currentScene = "Level" + currentLevel;
         StartCoroutine(SceneTransition(previousScene,currentScene));
+        // joyStickUI.SetActive(true);
     }
     public IEnumerator SceneTransition(string from,string to)
     {
@@ -127,6 +131,10 @@ public class GameManager : MonoBehaviour
         // 5. Fade back in
         yield return StartCoroutine(Fade(0f)); // 0f = transparent
         //TutorialUI();
+        if(to != "Main Menu")
+        {
+            joyStickUI.SetActive(true);
+        }
     }
 
     private IEnumerator Fade(float targetAlpha)

@@ -85,8 +85,21 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case PlayerState.NoForce:
-                movement.x = Input.GetAxis("Horizontal");
-                movement.y = Input.GetAxis("Vertical");
+                movement = Vector2.zero;
+
+                Vector2 inputVector = GameInput.Instance.GetMovementVector();
+
+                if (inputVector != Vector2.zero)
+                {
+                    movement = inputVector;
+                }
+                else
+                {
+                    if (GameInput.Instance.isRightPressed()) movement.x = 1;
+                    if (GameInput.Instance.isLeftPressed())  movement.x = -1;
+                    if (GameInput.Instance.isUpPressed())    movement.y = 1;
+                    if (GameInput.Instance.isDownPressed())  movement.y = -1;
+                }
                 if (movement.x != 0)
                 {
                     if (movement.x < 0)
@@ -106,7 +119,7 @@ public class Player : MonoBehaviour
                         particleDirection = Vector2.up;
                     }
                 }
-                if (Input.GetKeyDown(KeyCode.Space) && list.Count != 0)
+                if (GameInput.Instance.IsShootPressed() && list.Count != 0)
                 {
                     Shoot();
                     GameManager.Instance.IncrementShoots();
@@ -118,11 +131,6 @@ public class Player : MonoBehaviour
             case PlayerState.PlayerRestricted:
                 break;
         }
-        //Vector2 origin = (Vector2)transform.position;
-        //Vector2 dir = playerDirection.normalized;
-
-        //// Draw a red line in the Scene view
-        //Debug.DrawRay(origin, dir * rayDistance, Color.red);
     }
   
    
