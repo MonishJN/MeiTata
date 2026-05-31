@@ -422,8 +422,8 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1405593705
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_MaskInteraction: 0
@@ -732,6 +732,7 @@ GameObject:
   - component: {fileID: 680648581}
   - component: {fileID: 680648580}
   - component: {fileID: 680648579}
+  - component: {fileID: 680648582}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -822,6 +823,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &680648582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680648577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e1035e701ac954490ada1700c5d1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &778698360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12788,6 +12801,7 @@ GameObject:
   - component: {fileID: 2092445691}
   - component: {fileID: 2092445690}
   - component: {fileID: 2092445688}
+  - component: {fileID: 2092445692}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -12848,8 +12862,8 @@ Camera:
   m_GameObject: {fileID: 2092445687}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.35686275, g: 0.6627451, b: 0.5411765, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -12905,6 +12919,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2092445692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092445687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd8ecb1e992d7ee46bd1c35afaabd9ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseCameraSize: 7
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

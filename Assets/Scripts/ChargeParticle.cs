@@ -40,9 +40,6 @@ public class ChargeParticle : MonoBehaviour
         {
             ChangeOrientation();
         }
-        else if (collision.gameObject.name == "Object") { 
-            Destroy(gameObject);
-        }
         else if (collision.CompareTag("Door"))
         {
             Door door = collision.GetComponent<Door>();
@@ -55,7 +52,7 @@ public class ChargeParticle : MonoBehaviour
             }
 
         }
-        else if (collision.gameObject.name == "Terrain")
+        else if (collision.CompareTag("Terrain"))
         {
             Destroy(gameObject);
         }

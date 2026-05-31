@@ -11,7 +11,7 @@ public class Door : MonoBehaviour
     public new BoxCollider2D collider;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Player")
+        if (collision.CompareTag("Player"))
         {
             if (Player.Instance.hasKey)
             {
@@ -50,6 +50,7 @@ public class Door : MonoBehaviour
         
             Player.Instance.poleSwitcherCanBeCalled = false;
             Player.Instance.forceSpeed = 300;
+            GameManager.Instance.IncrementForceExperienced();
             return -(closestPoint - playerPosition).normalized;
     }
     public string GetDoorOrientaion() {

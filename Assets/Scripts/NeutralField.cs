@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class NeutralField : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private new BoxCollider2D collider;
 
     private void OnTriggerEnter2D(Collider2D collision)

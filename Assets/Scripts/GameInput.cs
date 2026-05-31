@@ -8,6 +8,11 @@ public class GameInput : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // <-- destroy the duplicate object
+            return;
+        }
         Instance = this;
         inputActions = new InputActions();
         inputActions.Enable();

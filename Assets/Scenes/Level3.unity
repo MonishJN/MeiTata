@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 1098593275}
   - component: {fileID: 1098593274}
   - component: {fileID: 1098593273}
+  - component: {fileID: 1098593277}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -715,6 +716,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1098593277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098593272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e1035e701ac954490ada1700c5d1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1122707618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -985,6 +998,7 @@ GameObject:
   - component: {fileID: 1257568188}
   - component: {fileID: 1257568187}
   - component: {fileID: 1257568185}
+  - component: {fileID: 1257568189}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1045,8 +1059,8 @@ Camera:
   m_GameObject: {fileID: 1257568184}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.35686275, g: 0.6627451, b: 0.5411765, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1102,6 +1116,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1257568189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257568184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd8ecb1e992d7ee46bd1c35afaabd9ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseCameraSize: 7
 --- !u!1 &1514621611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,7 +1216,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66.7
+  m_fontSize: 79.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1256,7 +1283,7 @@ GameObject:
   - component: {fileID: 1582450655}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1461,8 +1488,8 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1405593705
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_MaskInteraction: 0

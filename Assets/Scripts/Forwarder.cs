@@ -7,14 +7,6 @@ public class Forwarder : MonoBehaviour
 
     int [] playersBestScore = new int[20];
     int levelsUnlocked;
-
-    private void Start() {
-        Data loadedData = SaveSystem.LoadData();
-        if (loadedData != null) {
-            playersBestScore = loadedData.highScores;
-            levelsUnlocked = loadedData.levelsUnlocked;
-        } 
-    }
     public void StartGame()
     {
         mainMenuUI.SetActive(false);

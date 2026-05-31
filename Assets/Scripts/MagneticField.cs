@@ -4,9 +4,6 @@ using UnityEngine.UIElements;
 public class MagneticField : MonoBehaviour
 {
     [SerializeField] private new BoxCollider2D collider;
-
-
-
     [SerializeField] private GameObject RedField;
     [SerializeField] private GameObject BlueField;
 
@@ -32,12 +29,10 @@ public class MagneticField : MonoBehaviour
         if(fieldOrientation == Player.Instance.playerOrientation){
             Player.Instance.poleSwitcherCanBeCalled = false;
             Player.Instance.forceSpeed = 300;
-            //Player.Instance.SetPlayerState(Player.PlayerState.Force);
             return -(closestPoint - playerPosition).normalized; 
         }
         Player.Instance.poleSwitcherCanBeCalled = true;
         Player.Instance.forceSpeed = 150;
-        //Player.Instance.SetPlayerState(Player.PlayerState.Force);
         return (closestPoint - playerPosition).normalized; 
     }
     public string GetFieldOrientation() { 
@@ -45,9 +40,9 @@ public class MagneticField : MonoBehaviour
     }
     public void ChangeFieldOrientation()
     {
-        if (fieldOrientation == "Neutral") {
-            return;
-        }
+        // if (fieldOrientation == "Neutral") {
+        //     return;
+        // }
         if (fieldOrientation == "North")
         {
             fieldOrientation = "South";

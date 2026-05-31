@@ -13,7 +13,6 @@ public class BlueAnimation : MonoBehaviour
     }
     public void OnGameOver()
     {
-        //playerAnimator.SetTrigger("gameOver");
         playerAnimator.Play("Blue GameOver");
 
     }

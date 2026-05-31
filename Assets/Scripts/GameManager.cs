@@ -5,12 +5,10 @@ using NUnit.Framework.Constraints;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private CanvasGroup faderImage;
     [SerializeField] private GameObject joyStickUI;
 
     [SerializeField] private GameObject levelCompleteUI;
-    // [SerializeField] private GameObject levelMenuUI;
     [SerializeField] private GameObject scoreUI;
 
 
@@ -65,17 +63,15 @@ public class GameManager : MonoBehaviour
         currentScene = "Level" + currentLevel;
         
         StartCoroutine(SceneTransition(previousScene, currentScene));
-        // joyStickUI.SetActive(true);
     }
     public void LevelCompleted() { 
         joyStickUI.SetActive(false);
         levelCompleteUI.SetActive(true);
+        AudioManager.Instance.PlayLevelComplete();
         DisplayScore();
         levelsUnlocked = Mathf.Max(levelsUnlocked, currentLevel + 1);
         SaveSystem.SaveData(this);
         if (currentScene == "Level20") {
-            //Debug.Log("Work in Progress! Just Play from the Start!");
-            //currentLevel = 1;
             levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.GetComponent<UnityEngine.UI.Button>().interactable = false;
             return;
         }
@@ -95,7 +91,6 @@ public class GameManager : MonoBehaviour
         forceExperienced = 0;
 
         StartCoroutine(SceneTransition(currentScene, currentScene));
-        // joyStickUI.SetActive(true);
     }
     public void NextLevel()
     {
@@ -109,7 +104,6 @@ public class GameManager : MonoBehaviour
         currentLevel++;
         currentScene = "Level" + currentLevel;
         StartCoroutine(SceneTransition(previousScene,currentScene));
-        // joyStickUI.SetActive(true);
     }
     public IEnumerator SceneTransition(string from,string to)
     {
@@ -117,20 +111,17 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(Fade(1f)); // 1f = full black
 
         // 2. Unload the current level
-        // skip this step if from is "Manager" (i.e. first time loading a level from the main menu)
-            AsyncOperation unload = SceneManager.UnloadSceneAsync(from);
-            while (!unload.isDone) yield return null;
+        AsyncOperation unload = SceneManager.UnloadSceneAsync(from);
+        while (!unload.isDone) yield return null;
 
-        // skip this step if to is "Manager" (i.e. going back to main menu)
-            AsyncOperation load = SceneManager.LoadSceneAsync(to, LoadSceneMode.Additive);
-            while (!load.isDone) yield return null;
+        AsyncOperation load = SceneManager.LoadSceneAsync(to, LoadSceneMode.Additive);
+        while (!load.isDone) yield return null;
 
         // 4. Set the new scene as active (for lighting/physics)
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(to));
 
         // 5. Fade back in
         yield return StartCoroutine(Fade(0f)); // 0f = transparent
-        //TutorialUI();
         if(to != "Main Menu")
         {
             joyStickUI.SetActive(true);
@@ -142,7 +133,7 @@ public class GameManager : MonoBehaviour
         CanvasGroup cg = faderImage.GetComponent<CanvasGroup>();
         while (!Mathf.Approximately(cg.alpha, targetAlpha))
         {
-            cg.alpha = Mathf.MoveTowards(cg.alpha, targetAlpha, Time.deltaTime * 2f); // Adjust speed here
+            cg.alpha = Mathf.MoveTowards(cg.alpha, targetAlpha, Time.deltaTime * 2f);
             yield return null;
         }
     }
@@ -152,7 +143,7 @@ public class GameManager : MonoBehaviour
 }
 
 private IEnumerator ShowScoreLines() {
-    // Grab reference once
+    
     var textMesh = scoreUI.GetComponent<TMPro.TextMeshProUGUI>();
 
     // Line values
@@ -179,7 +170,7 @@ private IEnumerator ShowScoreLines() {
         forceExperienced++;
     }
     public void CalculateScore() {
-        score = 5000 - (firedShots * 100 + forceExperienced * 200);
+        score = 10000 - (firedShots * 150 + forceExperienced * 300);
         if (score <= 1500) {
             score = 1500;
         }

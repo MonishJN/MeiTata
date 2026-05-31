@@ -9,16 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject Red;
     [SerializeField] private GameObject Blue;
     [SerializeField] private GameObject Shooter;
-    //[SerializeField] private GameObject Raycaster;
-
-    //public LayerMask raycastMask;
-    //[SerializeField] private float rayDistance;
 
     private RedAnimation redAnimation;
     private BlueAnimation blueAnimation;
-
-    //[SerializeField] private Animator redAnimator;
-    //[SerializeField] private Animator blueAnimator;
     private Rigidbody2D rigidBody;
 
     public int forceSpeed = 0;
@@ -49,9 +42,7 @@ public class Player : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         state = PlayerState.NoForce;
-        //playerOrientation = "North";
         list = new List<GameObject>();
-        //magneticLayer = LayerMask.NameToLayer("Magnetic");
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -74,7 +65,7 @@ public class Player : MonoBehaviour
         rigidBody.linearVelocity = new Vector2(movement.x * speed, movement.y * speed);
         TriggerPlayerTree();
 
-        if (state == PlayerState.Force || state == PlayerState.Force)
+        if (state == PlayerState.Force)
         {
             ExecuteForce(playerDirection);
         }
@@ -139,11 +130,13 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Red Pickup"))
         {
+            AudioManager.Instance.PlayPickup();
             list.Add(chargeParticleRed);
             Destroy(collision.gameObject);
         }
         else if (collision.gameObject.CompareTag("Blue Pickup"))
         {
+            AudioManager.Instance.PlayPickup();
             list.Add(chargeParticleBlue);
             Destroy(collision.gameObject);
         }
@@ -176,12 +169,8 @@ public class Player : MonoBehaviour
     public void ExecuteForce(Vector2 direction) {
         Debug.Log("Execute Force is called!");
         movement = Vector2.zero;
+        AudioManager.Instance.PlayForceExecution();
         rigidBody.AddForce(direction * forceSpeed, ForceMode2D.Impulse);
-        //StartCoroutine(SetStateAfterDelay(.01f));
-        //if (state == PlayerState.PushForce)
-        //{
-        //    CheckForBounce(playerDirection);
-        //}
         state = PlayerState.NoForce;
 
         if (poleSwitcherCanBeCalled)
@@ -189,38 +178,13 @@ public class Player : MonoBehaviour
             PoleSwitcher();
         }
     }
-    //private void CheckForBounce(Vector2 direction)
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayDistance,raycastMask);
-       
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("Ray hit: " + hit.transform.gameObject);
-
-    //        if (state == PlayerState.NoForce)
-    //        {
-    //            // Normal collision → allow pushing/moving
-    //            hit.collider.attachedRigidbody?.AddForce(direction * forceSpeed, ForceMode2D.Impulse);
-    //        }
-    //        else if (hit.collider.gameObject.name == "Object")
-    //        {
-    //            // Repel bounce → reflect velocity
-    //            Vector2 reflect = Vector2.Reflect(rigidBody.linearVelocity, hit.normal);
-    //            rigidBody.linearVelocity = reflect;
-    //        }
-    //    }
-    //}
-    //IEnumerator SetStateAfterDelay(float delay)
-    //{
-    //    yield return new WaitForSeconds(delay);
-    //    state = PlayerState.NoForce;
-    //}
     private void Shoot() {
         TriggerOnShoot();
         Instantiate(list[0], Shooter.transform.position , Quaternion.identity);
         list.RemoveAt(0);
     }
     public void TriggerOnGameOver() {
+        AudioManager.Instance.PlayPortalEnter();
         if (playerOrientation == "North")
         {
             redAnimation.OnGameOver();
@@ -240,6 +204,7 @@ public class Player : MonoBehaviour
         }
     }
     private void TriggerOnShoot() {
+        AudioManager.Instance.PlayShoot();
         if (playerOrientation == "North")
         {
             redAnimation.OnShoot();
