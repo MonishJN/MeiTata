@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for accessing Button components
+using UnityEngine.UI;
 
 public class ButtonSoundAssigner : MonoBehaviour
 {

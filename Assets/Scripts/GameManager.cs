@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private CanvasGroup faderImage;
     [SerializeField] private GameObject joyStickUI;
-
+    [SerializeField] private GameObject pauseButton;
+    [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject levelCompleteUI;
     [SerializeField] private GameObject scoreUI;
 
@@ -17,7 +18,6 @@ public class GameManager : MonoBehaviour
     private int score;
     public int[] playersBestScore = new int[20];
     public int levelsUnlocked ;
-    //[SerializeField] private GameObject tutorialUI;
     private string currentScene = "Main Menu";
     private string previousScene;
     private int currentLevel = 1;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private void Awake(){
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // <-- destroy the duplicate object
+            Destroy(gameObject); 
             return;
         }
 
@@ -34,12 +34,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         Data loadedData = SaveSystem.LoadData(); 
         if (loadedData != null) {
-            Debug.Log("Data loaded successfully.");
             playersBestScore = loadedData.highScores;
             levelsUnlocked = loadedData.levelsUnlocked;
         } else {
-            // File exists but data is null → fallback
-            Debug.LogWarning("Data file found but data is null. Initializing defaults.");
             playersBestScore = new int[20];
             levelsUnlocked = 1;
             SaveSystem.SaveData(this);
@@ -64,8 +61,17 @@ public class GameManager : MonoBehaviour
         
         StartCoroutine(SceneTransition(previousScene, currentScene));
     }
+    public void PauseGame() {
+        Time.timeScale = 0f;
+        pauseMenu.SetActive(true);
+    }
+    public void ResumeGame() {
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+    }
     public void LevelCompleted() { 
         joyStickUI.SetActive(false);
+        pauseButton.SetActive(false);
         levelCompleteUI.SetActive(true);
         AudioManager.Instance.PlayLevelComplete();
         DisplayScore();
@@ -77,15 +83,20 @@ public class GameManager : MonoBehaviour
         }
     }
     public void BackToMainMenu() {
+        Time.timeScale = 1f;
         levelCompleteUI.SetActive(false);
         joyStickUI.SetActive(false);
+        pauseButton.SetActive(false);
+        pauseMenu.SetActive(false);
         levelCompleteUI.transform.GetChild(0).GetChild(3).gameObject.GetComponent<UnityEngine.UI.Button>().interactable = true;
         previousScene = currentScene;
         currentScene = "Main Menu";
         StartCoroutine(SceneTransition(previousScene, currentScene));
     }
     public void ReloadLevel() {
+        Time.timeScale = 1f;
         levelCompleteUI.SetActive(false);
+        pauseMenu.SetActive(false);
         //Reset the score and other variables for the new level
         firedShots = 0;
         forceExperienced = 0;
@@ -125,6 +136,7 @@ public class GameManager : MonoBehaviour
         if(to != "Main Menu")
         {
             joyStickUI.SetActive(true);
+            pauseButton.SetActive(true);
         }
     }
 

@@ -167,7 +167,6 @@ public class Player : MonoBehaviour
         }
     }
     public void ExecuteForce(Vector2 direction) {
-        Debug.Log("Execute Force is called!");
         movement = Vector2.zero;
         AudioManager.Instance.PlayForceExecution();
         rigidBody.AddForce(direction * forceSpeed, ForceMode2D.Impulse);

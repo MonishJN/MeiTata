@@ -10,7 +10,7 @@ public class GameInput : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // <-- destroy the duplicate object
+            Destroy(gameObject); 
             return;
         }
         Instance = this;

@@ -21,7 +21,6 @@ public class RedAnimation : MonoBehaviour
     {
         Destroy(transform.parent.gameObject);
         GameManager.Instance.LevelCompleted();
-        Debug.Log("Player is Destroyed!");
     }
     public void OnShoot() {
         playerAnimator.SetTrigger("shoot");

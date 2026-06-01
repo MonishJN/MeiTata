@@ -17,7 +17,6 @@ public class Door : MonoBehaviour
             {
                 if (Player.Instance.playerOrientation == doorOrientaion)
                 {
-                    Debug.Log("Cant Enter!");
                     Player.Instance.playerDirection = ApplyPushAway();
                     Player.Instance.SetPlayerState(Player.PlayerState.Force);
                     return;
@@ -25,19 +24,15 @@ public class Door : MonoBehaviour
                 Player.Instance.SetPlayerState(Player.PlayerState.PlayerRestricted);
                 Player.Instance.SetPlayerMovement();
                 Player.Instance.transform.position = transform.position;
-                Debug.Log("Door Position is :" + transform.position);
                 Player.Instance.TriggerOnGameOver();
-                Debug.Log("Level Completed!");
             }
             else {
                 if (Player.Instance.playerOrientation == doorOrientaion)
                 {
-                    Debug.Log("Cant Enter!");
                     Player.Instance.playerDirection = ApplyPushAway();
                     Player.Instance.SetPlayerState(Player.PlayerState.Force);
                     return;
                 }
-                Debug.Log("Need to keyto Enter!");
             }
         }
     }

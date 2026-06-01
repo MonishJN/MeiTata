@@ -25,11 +25,36 @@ public class Forwarder : MonoBehaviour
         }
 
     }
+    public void BackgroundMusicForwarder(bool isEnabled) {
+        AudioManager.Instance.BackgroundMusic(isEnabled);
+    }
+    public void BGVolumeForwarder(float volume) {
+        AudioManager.Instance.SetBGVolume(volume);
+    }
+    public void SFXForwarder(bool isEnabled) {
+        AudioManager.Instance.SFX(isEnabled);
+    }
+    public void SFXVolumeForwarder(float volume) {
+        AudioManager.Instance.SetSFXVolume(volume);
+    }
     public void GoTOThatLevelForwarder(int level) {
         GameManager.Instance.GotoThatLevel(level);
     }
    public void BackToMainMenu() {
         levelMenuUI.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
         mainMenuUI.SetActive(true);
+    }
+    public void GoToOptions() {
+        mainMenuUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+    }
+    public void GoToCredits() {
+        mainMenuUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        mainMenuUI.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
     }
 }

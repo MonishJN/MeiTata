@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // The static instance that other scripts will call
     public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
@@ -21,11 +20,9 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        // Simple Singleton pattern logic
         if (Instance == null)
         {
             Instance = this;
-            // Keeps the audio playing smoothly between level scenes
             DontDestroyOnLoad(gameObject); 
         }
         else
@@ -36,19 +33,31 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        // Start playing the background music automatically when the game starts
         if (backgroundMusic != null)
         {
             musicSource.clip = backgroundMusic;
-            //musicSource.loop = true;
             musicSource.Play();
         }
+    }
+    public void BackgroundMusic(bool isEnabled) {
+        if (backgroundMusic != null)
+        {
+          musicSource.volume = isEnabled ? 1f : 0f;
+        }
+    }
+    public void SetBGVolume(float volume) {
+        musicSource.volume = volume;
+    }
+    public void SFX(bool isEnabled) {
+        sfxSource.volume = isEnabled ? 1f : 0f;
+    }
+    public void SetSFXVolume(float volume) {
+        sfxSource.volume = volume;
     }
     public void PlayLevelComplete()
     {
         sfxSource.PlayOneShot(levelCompleteSound);
     }
-    // Call this from anywhere using: AudioManager.Instance.PlayPortalEnter();
     public void PlayPortalEnter()
     {
         sfxSource.PlayOneShot(portalEnterSound);
@@ -65,7 +74,6 @@ public class AudioManager : MonoBehaviour
 
     public void PlayForceExecution()
     {
-        // sfxSource.PlayOneShot(forceExecutionSound);
         sfxSource.clip = forceExecutionSound;
         sfxSource.Play();
     }

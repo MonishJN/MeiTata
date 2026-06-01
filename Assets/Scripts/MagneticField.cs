@@ -13,7 +13,6 @@ public class MagneticField : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player Entered Magnetic Field!");
             GameManager.Instance.IncrementForceExperienced();
             Player.Instance.SetPlayerState(Player.PlayerState.Force);
             Player.Instance.playerDirection = GetDirectionToClosestPoint();
@@ -40,9 +39,6 @@ public class MagneticField : MonoBehaviour
     }
     public void ChangeFieldOrientation()
     {
-        // if (fieldOrientation == "Neutral") {
-        //     return;
-        // }
         if (fieldOrientation == "North")
         {
             fieldOrientation = "South";
