@@ -35,6 +35,24 @@ public class GameInput : MonoBehaviour
         return inputActions.Player.down.IsPressed();
     }
     public Vector2  GetMovementVector() {
-        return inputActions.Player.movement.ReadValue<Vector2>();
+        Vector2 joystickInput = inputActions.Player.movement.ReadValue<Vector2>();
+        Vector2 lockedInput = Vector2.zero;
+
+        // 3. Compare which direction the thumb is pushing harder
+        if (joystickInput.magnitude > 0.1f)
+        {
+            // Is the horizontal push stronger than the vertical push?
+            if (Mathf.Abs(joystickInput.x) > Mathf.Abs(joystickInput.y))
+            {
+                // Snap strictly Left (-1) or Right (1), and completely kill vertical movement
+                lockedInput.x = joystickInput.x > 0 ? 1f : -1f;
+            }
+            else // Otherwise, the vertical push is stronger
+            {
+                // Snap strictly Down (-1) or Up (1), and completely kill horizontal movement
+                lockedInput.y = joystickInput.y > 0 ? 1f : -1f;
+            }
+        }
+        return lockedInput;
     }
 }

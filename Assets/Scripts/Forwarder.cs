@@ -11,11 +11,6 @@ public class Forwarder : MonoBehaviour
     {
         mainMenuUI.SetActive(false);
         levelMenuUI.SetActive(true);   
-        Data loadedData = SaveSystem.LoadData();
-        if (loadedData != null) {
-            playersBestScore = loadedData.highScores;
-            levelsUnlocked = loadedData.levelsUnlocked;
-        } 
         for(int i =2; i<=20; i++) {
             if (i <= GameManager.Instance.levelsUnlocked) {
                 levelMenuUI.transform.GetChild(0).GetChild(i).GetComponent<UnityEngine.UI.Button>().interactable = true;
@@ -56,5 +51,8 @@ public class Forwarder : MonoBehaviour
         mainMenuUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         mainMenuUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         mainMenuUI.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+    }
+    public void QuitGame() {
+        Application.Quit();
     }
 }

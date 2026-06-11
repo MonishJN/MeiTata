@@ -1239,7 +1239,7 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 6.8683715, y: 1.2237039, z: 0}
+    - position: {x: 6.877053, y: 1.2177355, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -18755,7 +18755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6198332461490276500, guid: 3ac7cfce8e60631488190e696af8e2b2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.47
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6198332461490276500, guid: 3ac7cfce8e60631488190e696af8e2b2, type: 3}
       propertyPath: m_LocalPosition.z

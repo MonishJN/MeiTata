@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject levelCompleteUI;
-    [SerializeField] private GameObject scoreUI;
+    [SerializeField] private GameObject scoreBoard;
 
-
+    private bool joyStickNeeded = false;
     private int firedShots;
     private int forceExperienced;
     private int score;
@@ -32,6 +32,17 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        // Check if we're on a mobile platform (Android or iOS)
+        #if UNITY_ANDROID || UNITY_IOS
+            joyStickNeeded = true;
+        #elif UNITY_WEBGL && !UNITY_EDITOR
+            joyStickNeeded = Application.isMobilePlatform; 
+        #else
+            joyStickNeeded = false;
+        #endif
+
+
+        //Load Saved Data cleanly
         Data loadedData = SaveSystem.LoadData(); 
         if (loadedData != null) {
             playersBestScore = loadedData.highScores;
@@ -135,7 +146,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(Fade(0f)); // 0f = transparent
         if(to != "Main Menu")
         {
-            joyStickUI.SetActive(true);
+            joyStickUI.SetActive(joyStickNeeded);
             pauseButton.SetActive(true);
         }
     }
@@ -151,29 +162,35 @@ public class GameManager : MonoBehaviour
     }
     private void DisplayScore() {
     CalculateScore();
-    StartCoroutine(ShowScoreLines());
+    StartCoroutine(ShowScoreLinesSequentially());
 }
 
-private IEnumerator ShowScoreLines() {
-    
-    var textMesh = scoreUI.GetComponent<TMPro.TextMeshProUGUI>();
+    private IEnumerator ShowScoreLinesSequentially() {
+        Transform scoreboardParent = scoreBoard.transform;
 
-    // Line values
-    string[] lines = new string[] {
-        firedShots.ToString(),
-        forceExperienced.ToString(),
-        playersBestScore[currentLevel-1].ToString(),
-        score.ToString()
-    };
+        string[] values = new string[] {
+            firedShots.ToString(),
+            forceExperienced.ToString(),
+            playersBestScore[currentLevel-1].ToString(),
+            score.ToString()
+        };
 
-    textMesh.text = ""; // clear first
+        for (int i = 0; i < 4; i++) {
+            scoreboardParent.GetChild(i).gameObject.SetActive(false);
+        }
 
-    // Sequential reveal
-    for (int i = 0; i < lines.Length; i++) {
-        textMesh.text += lines[i] + "\n";
-        yield return new WaitForSeconds(0.5f); // wait before showing next line
+        for (int i = 0; i < 4; i++) {
+            Transform row = scoreboardParent.GetChild(i);
+            
+            var valueTextMesh = row.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>();
+            
+            valueTextMesh.text = values[i];
+
+            row.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(0.5f); 
+        }
     }
-}
 
     public void IncrementShoots() {
         firedShots++;

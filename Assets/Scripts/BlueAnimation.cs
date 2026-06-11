@@ -20,7 +20,6 @@ public class BlueAnimation : MonoBehaviour
     {
         Destroy(transform.parent.gameObject);
         GameManager.Instance.LevelCompleted();
-        Debug.Log("Player is Destroyed!");
     }
     public void OnShoot()
     {
